@@ -1,6 +1,4 @@
-console.log("hi");
-
-const LABEL = "População"
+const LABEL = "População total"
 const TITLE = 'Crescimento populacional no Brasil';
 const SUBTITLE = "Dados do IBGE"
 
@@ -10,9 +8,9 @@ d3.csv('atp_wta.csv')
 function makeChart(players) {
 
   const label = ["oi", "hey", "hi"];
-  var Anos = players.map(function(d) {return parseFloat(d.Ano)});
-  var Populacao = players.map(function(d) {return parseFloat(d.População)});
-  var PopulacaoCompleto = players.map(function(d) {return d.População});
+  var Anos = players.map((d) => {return parseFloat(d.Ano)});
+  var Populacao = players.map((d) => {return parseFloat(d.População)});
+  var PopulacaoCompleto = players.map((d) => {return d.População});
 
   const data = {
     labels: Anos,
@@ -34,19 +32,42 @@ function makeChart(players) {
       lineTension: 0,
     }]
   };
+
+  const titleTooltip = (tooltipItems) => {
+    const index = tooltipItems.formattedValue + " milhões";
+
+    return "População: " + index;
+  }
   const config = {
     type: 'line',
     data: data,
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       hover: {
         mode: "index",
         intersec: false
       },
       plugins: {
+        tooltip: {
+          caretPadding: 10,
+          caretSize: 5,
+          usePointStyle: true,
+          titleSpacing: 4,
+          footerSpacing: 8,
+          padding: 8,
+          boxPadding: 5,
+          borderColor: 'rgb(155,99,100)',
+          borderWidth: 3,
+          callbacks: {
+            label: titleTooltip
+          }
+        },
+
         title: {
           display: true,
           text: TITLE,
+          font: {size: 22},
           color: "rgb(60, 60, 60)"
         },
         subtitle: {
@@ -62,11 +83,11 @@ function makeChart(players) {
       },
       scales: {
         y: {
-          max: 250,
+          max: 255,
           ticks: {
             stepSize: 10,
             // Include m sign
-            callback: function(value, index, ticks) {
+            callback: (value, index, ticks) => {
               if (index == 0) { return "1 milhão" }
               return value + " milhões";
             },
@@ -79,13 +100,13 @@ function makeChart(players) {
   Chart.defaults.font.size = 20;
   Chart.defaults.font.family = 'Arial';
 
+
+
   const myChart = new Chart(
     document.getElementById('myChart'),
     config
   );
 
-
-  
   const tabledatar = document.createElement('tr');
   const tabledatah = document.createElement('th');
   const tabledatad = document.createElement('td');
@@ -115,3 +136,4 @@ function makeChart(players) {
     tabledatar.appendChild(tabledatad);
   }
 }
+
