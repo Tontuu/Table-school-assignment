@@ -43,7 +43,7 @@ function makeChart(players) {
     data: data,
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       hover: {
         mode: "index",
         intersec: false
@@ -81,9 +81,11 @@ function makeChart(players) {
           display: true,
         }
       },
+
       scales: {
         y: {
-          max: 250,
+          beginsAtZero: true,
+          max: 220,
           ticks: {
             stepSize: 10,
             // Include m sign
