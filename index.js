@@ -83,7 +83,7 @@ function makeChart(players) {
       },
       scales: {
         y: {
-          max: 255,
+          max: 250,
           ticks: {
             stepSize: 10,
             // Include m sign
