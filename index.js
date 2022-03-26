@@ -1,6 +1,6 @@
 const LABEL = "População total"
 const TITLE = 'Crescimento populacional no Brasil';
-const SUBTITLE = "Dados do IBGE"
+const SUBTITLE = "Dados do IBGE (1872-2022)"
 
 d3.csv('atp_wta.csv')
   .then(makeChart);
