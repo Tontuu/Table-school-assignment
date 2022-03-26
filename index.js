@@ -43,7 +43,7 @@ function makeChart(players) {
     data: data,
     options: {
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
       hover: {
         mode: "index",
         intersec: false
