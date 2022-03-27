@@ -1,5 +1,6 @@
+const PRIMARY_COLOR = '#009879'
 const LABEL = "População total"
-const TITLE = 'Crescimento populacional no Brasil';
+const TITLE = "Crescimento populacional no Brasil";
 const SUBTITLE = "Dados do IBGE (1872-2022)"
 
 d3.csv('atp_wta.csv')
@@ -12,20 +13,22 @@ function makeChart(players) {
   var Populacao = players.map((d) => {return parseFloat(d.População)});
   var PopulacaoCompleto = players.map((d) => {return d.População});
 
+
   const data = {
     labels: Anos,
     datasets: [{
       label: LABEL,
       data: Populacao,
-      borderColor: 'rgb(155,99,132)',
+      borderColor: PRIMARY_COLOR,
       borderWidth: 4,
+
       pointRadius: 5,
-      pointHoverRadius: 7,
-      pointBackgroundColor: "rgb(155,99,132)",
+      pointHoverRadius: 8,
+      pointBackgroundColor: PRIMARY_COLOR,
       pointBorderColor: "#fff",
       pointBorderWidth: 1,
       pointHitRadius: 5,
-      backgroundColor: "rgba(155, 99, 100, 0.1)",
+      backgroundColor: "rgba(0, 150, 70, 0.05)",
       fill: true,
       radius: 5,
       tension: 0.5,
@@ -38,6 +41,7 @@ function makeChart(players) {
 
     return "População: " + index;
   }
+
   const config = {
     type: 'line',
     data: data,
@@ -48,27 +52,64 @@ function makeChart(players) {
         mode: "index",
         intersec: false
       },
+
+      onClick: (e, items) => {
+        if (items) {
+
+          const index = items[0].index;
+          const query = ".index-" + index;
+
+          row = document.querySelector(query)
+
+          let activeRows = document.getElementsByClassName('active-row');
+          if (activeRows.length > 0) 
+            activeRows[0].className = activeRows[0].className.replace('active-row', "");
+
+          row.classList.add('active-row');
+
+          row.scrollIntoView({
+            behavior: 'smooth', block: "center"
+          })
+        }
+      },
+
       plugins: {
         tooltip: {
+          yAlign: 'bottom',
           caretPadding: 10,
           caretSize: 5,
           usePointStyle: true,
           titleSpacing: 4,
-          footerSpacing: 8,
+          footerSpacing: 4,
+          footerColor: 'rgb(50, 200, 160)',
+          footerFont: {size: 20, weight: '600'},
+          footerMarginTop: 8,
           padding: 8,
           boxPadding: 5,
-          borderColor: 'rgb(155,99,100)',
+          borderColor: PRIMARY_COLOR,
           borderWidth: 3,
           callbacks: {
-            label: titleTooltip
+            label: titleTooltip,
+            footer: (context) => {
+              const index = context[0].dataIndex;
+              
+              if (!index)
+                return;
+
+              const content = context[0].dataset.data[index];
+              const lastContent = context[0].dataset.data[index-1];
+
+              return "Aumento de " + (content-lastContent) +
+                " milhões";
+            }
           }
         },
 
         title: {
           display: true,
           text: TITLE,
-          font: {size: 22},
-          color: "rgb(60, 60, 60)"
+          font: {size: 22, weight: '900'},
+          color: "rgb(60, 60, 60)",
         },
         subtitle: {
           display: true,
@@ -103,27 +144,33 @@ function makeChart(players) {
   Chart.defaults.font.family = 'Arial';
 
 
-
   const myChart = new Chart(
     document.getElementById('myChart'),
     config
   );
 
-  const tabledatar = document.createElement('tr');
+
+  const tablerow = document.createElement('tr');
   const tabledatah = document.createElement('th');
   const tabledatad = document.createElement('td');
+  const tablehead = document.createElement('thead');
 
   const anoRow = document.createTextNode("Anos");
   const popRow = document.createTextNode("População");
 
+  tablerow.appendChild(tabledatah);
+  tablerow.appendChild(tabledatad);
+  tablehead.appendChild(tablerow);
+  tabledata.appendChild(tablehead);
   tabledatah.appendChild(anoRow);
   tabledatad.appendChild(popRow);
-  tabledata.appendChild(tabledatar);
-  tabledatar.appendChild(tabledatah);
-  tabledatar.appendChild(tabledatad);
+
+
+  const tablebody = document.createElement('tbody');
+  tabledata.appendChild(tablebody);
 
   for (i=0; i <  Anos.length; i++) {
-    const tabledatar = document.createElement('tr');
+    const tablerow = document.createElement('tr');
     const tabledatah = document.createElement('th');
     const tabledatad = document.createElement('td');
 
@@ -132,10 +179,23 @@ function makeChart(players) {
 
     tabledatah.appendChild(labelText);
     tabledatad.appendChild(dataPoint);
+    tablerow.appendChild(tabledatah);
+    tablerow.appendChild(tabledatad);
+    tablebody.appendChild(tablerow);
 
-    tabledata.appendChild(tabledatar);
-    tabledatar.appendChild(tabledatah);
-    tabledatar.appendChild(tabledatad);
+    tablerow.onclick = () => {
+      document.querySelector('#myChart').scrollIntoView({
+        behavior: 'smooth'
+      })
+    };
+
+    tablerow.classList.add('index-' + i);
+
+    if (i == Anos.length-1) {
+      tablerow.classList.add('active-row');
+      console.log(tablerow.rowIndex)
+    }
+
   }
 }
 
