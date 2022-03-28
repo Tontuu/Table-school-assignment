@@ -89,11 +89,20 @@
 
 		.content-table tbody tr {
 			border-bottom: 1px solid #dddddd;
+			transition: all .1s ease-in;
+			cursor: pointer;
 		}
 
 		.content-table tbody tr:nth-of-type(even) {
 			background-color: #f3f3f3;
 		}
+
+		.content-table tbody tr:hover {
+			background-color: #ededed;
+			transform: scale(1.006);
+			box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
+			font-weight: bold;
+		}	
 
 		.content-table tbody tr:last-of-type {
 			border-bottom: 2px solid var(--primary-color-hue);
@@ -101,6 +110,13 @@
 
 		.content-table tbody tr.active-row {
 			color: var(--primary-color-hue);
+		}
+
+		@media only screen and (max-width: 768px) {
+			.content-table {
+				width: 80%;
+			}
+		
 		}
 
 		</style>
