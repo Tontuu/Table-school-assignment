@@ -187,6 +187,11 @@ function makeChart(players) {
       document.querySelector('#myChart').scrollIntoView({
         behavior: 'smooth'
       })
+      let activeRows = document.getElementsByClassName('active-row');
+      if (activeRows.length > 0) 
+        activeRows[0].className = activeRows[0].className.replace('active-row', "");
+
+      tablerow.classList.add('active-row');
     };
 
     tablerow.classList.add('index-' + i);
